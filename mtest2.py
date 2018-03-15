@@ -1,6 +1,7 @@
 import alsaaudio,time,audioop
 import matplotlib.pyplot as plt
-inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK)
+card = "hw:2,0"
+inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,card)
 inp.setchannels(1)
 inp.setrate(32000)
 inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
@@ -24,5 +25,5 @@ while test == True:
         test = False
         mtest.write(str(thing))
         mtest.close()
-        plt.plot(stuff,thing)
+        plt.plot(thing)
         plt.show()
