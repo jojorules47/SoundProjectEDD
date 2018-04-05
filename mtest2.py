@@ -11,7 +11,6 @@ inp.setperiodsize(160)
 stuff = 0
 buff = np.array([])
 test = True
-
 while test == True:
     l,data = inp.read()
     if l:

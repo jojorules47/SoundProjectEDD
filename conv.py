@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from Equalizer import Equalizer
 
 N = 16
 K = 4
@@ -17,8 +18,15 @@ for n in range(N-K):
 
 f = np.fft.irfft(np.fft.rfft(a,N)*np.fft.rfft(b,N))
 
+eq = Equalizer()
+nobs = np.ones(500)
+nobs[:100] = 0
+eq.setNobs(nobs)
+eq.makeResponse()
+im = eq.getImpulse()
+
 plt.subplot(2,1,1)
-plt.plot(c)
+plt.plot(im)
 plt.subplot(2,1,2)
 plt.plot(f)
 plt.show()
