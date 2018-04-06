@@ -1,7 +1,9 @@
 import alsaaudio,time,audioop
 import matplotlib.pyplot as plt
 import numpy as np
-card = "hw:1,0"
+import wave
+
+card = "hw:2,0"
 inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,card)
 inp.setchannels(1)
 inp.setrate(32000)
@@ -19,5 +21,13 @@ while test == True:
     stuff += 1
     if len(buff) >= 160000:
         test = False
-        plt.plot(buff)
-        plt.show()
+        
+        w = wave.open('mic.wav','w')
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(44100)
+        asig = np.ndarray(buff,dtype=np.int16)
+        w.writeframes(asig)
+
+#        plt.plot(buff)
+#        plt.show()
