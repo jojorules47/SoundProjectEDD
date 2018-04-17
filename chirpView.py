@@ -23,12 +23,14 @@ for cnt in range(loops):
 mag = np.abs(f)
 ave = np.average(mag[100:300])*2
 filt = np.clip(ave/mag,0,10)/10
+twos = 2 * np.ones(500,dtype=np.complex)
+nfilt = twos - filt
 
 r = wave.open('chirp.wav','r')
 buff = r.readframes(r.getnframes())
 samps = np.fromstring(buff,dtype=np.int16)
 sample_rate_wave = 32000
-nob_size = 500.0 * sample_rate_wave / 32000
+nob_size = int(500.0 * sample_rate_wave / 32000)
 nobs = np.ones(nob_size)
 nobs[:500] = filt
 
@@ -36,15 +38,17 @@ eq = Equalizer()
 eq.setNobs(nobs)
 eq.makeResponse()
 sig = eq.filterAll(samps)
-w = wave.open('babyfilt.wav','w')
+w = wave.open('filt.wav','w')
 w.setnchannels(1)
 w.setsampwidth(2)
 w.setframerate(sample_rate_wave)
 asig = np.array(sig,dtype=np.int16)
 w.writeframes(asig.data)
 
-plt.subplot(2,1,1)
+plt.subplot(3,1,1)
 plt.plot(mag/ave)
-plt.subplot(2,1,2)
+plt.subplot(3,1,2)
 plt.plot(filt)
+plt.subplot(3,1,3)
+plt.plot(nfilt)
 plt.show()
