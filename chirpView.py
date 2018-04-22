@@ -23,7 +23,7 @@ for cnt in range(loops):
 mag = np.abs(f)
 ave = np.average(mag[100:300])*2
 filt = np.clip(ave/mag,0,10)/10
-twos = 2 * np.ones(500,dtype=np.complex)
+twos = 2 * np.ones(500)
 nfilt = twos - filt
 
 r = wave.open('chirp.wav','r')
@@ -32,7 +32,7 @@ samps = np.fromstring(buff,dtype=np.int16)
 sample_rate_wave = 32000
 nob_size = int(500.0 * sample_rate_wave / 32000)
 nobs = np.ones(nob_size)
-nobs[:500] = filt
+nobs[:500] = nfilt
 
 eq = Equalizer()
 eq.setNobs(nobs)

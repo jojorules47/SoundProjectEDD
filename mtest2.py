@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import wave
 
-card = "hw:1,0"
+card = "hw:2,0"
 inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,card)
 inp.setchannels(1)
 inp.setrate(32000)
