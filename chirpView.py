@@ -26,10 +26,15 @@ filt = np.clip(ave/mag,0,10)/10
 twos = 2 * np.ones(500)
 nfilt = twos - filt
 
-r = wave.open('chirp.wav','r')
+r = wave.open('baby.wav','r')
 buff = r.readframes(r.getnframes())
-samps = np.fromstring(buff,dtype=np.int16)
-sample_rate_wave = 32000
+
+samps = np.fromstring(buff[0::],dtype=np.int16)
+
+sampsL = samps[::2]
+sampsR = samps[1::2]
+#sample_rate_wave = 32000
+sample_rate_wave = 44100
 nob_size = int(500.0 * sample_rate_wave / 32000)
 nobs = np.ones(nob_size)
 nobs[:500] = nfilt
@@ -37,13 +42,17 @@ nobs[:500] = nfilt
 eq = Equalizer()
 eq.setNobs(nobs)
 eq.makeResponse()
-sig = eq.filterAll(samps)
-w = wave.open('filt.wav','w')
-w.setnchannels(1)
+sigL = eq.filterAll(sampsL) / 2
+sigR = eq.filterAll(sampsR) / 2
+w = wave.open('babyfilt.wav','w')
+w.setnchannels(2)
 w.setsampwidth(2)
 w.setframerate(sample_rate_wave)
-asig = np.array(sig,dtype=np.int16)
-w.writeframes(asig.data)
+sig = np.zeros(len(sigL) + len(sigR), dtype=np.int16)
+sig[::2] =  np.array(sigL,dtype=np.int16)
+sig[1::2] =  np.array(sigR,dtype=np.int16)
+#asig = np.array(sig,dtype=np.int16)
+w.writeframes(sig.data)
 
 plt.subplot(3,1,1)
 plt.plot(mag/ave)
