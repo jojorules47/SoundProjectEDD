@@ -28,5 +28,13 @@ while test == True:
         asig = np.array(buff,dtype=np.int16)
         w.writeframes(asig.data)
 
-#        plt.plot(buff)
-#        plt.show()
+        size = 999
+        loops = len(asig)/size
+        f = np.zeros(500,dtype=np.complex)
+        for cnt in range(loops):
+            f += np.fft.rfft(asig[cnt*size:cnt*size+size])
+        mag = np.abs(f)
+        ave = np.average(mag[100:300])*2
+        #plt.plot(np.abs(np.fft.rfft(asig)))
+        plt.plot(mag/ave)
+        plt.show()
